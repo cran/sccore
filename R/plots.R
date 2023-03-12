@@ -1,14 +1,15 @@
-#' @import ggplot2
+#' @import ggplot2 scales
+#' @importFrom dplyr bind_rows arrange filter select mutate
 #' @importFrom graphics par
 #' @importFrom grDevices adjustcolor rainbow colorRampPalette
 #' @importFrom magrittr %>% %<>% %$%
 #' @importFrom rlang .data
-#' @import scales
+#' @importFrom stats setNames
 NULL
 
 ## for magrittr and dplyr functions below
 if(getRversion() >= "2.15.1"){
-  utils::globalVariables(c(".", "n", "Size", "Group", "x", "y"))
+  utils::globalVariables(c(".", "n", "Size", "Group", "x", "y", "Type", "Gene", "gene", "cluster"))
 }
 
 
@@ -70,7 +71,7 @@ fac2col <- function(x, s=1, v=1, shuffle=FALSE, min.group.size=1,
 #' @param gradient.range.quantile extreme quantiles of values that should be trimmed prior to color mapping (default=0.95)
 #' @examples
 #' colors <- val2col( rnorm(10) )
-#' 
+#'
 #' @export
 val2col <- function(x, gradientPalette=NULL, zlim=NULL, gradient.range.quantile=0.95) {
   nx <- names(x);
@@ -475,7 +476,7 @@ embeddingPlot <- function(embedding, groups=NULL, colors=NULL, subgroups=NULL, p
 #' @examples
 #' library(dplyr)
 #' ## Create merged count matrix
-#' ## In this example, cms is a list of count matrices from, e.g., Cellranger count, 
+#' ## In this example, cms is a list of count matrices from, e.g., Cellranger count,
 #' ## where cells are in columns and genes in rows
 #' ## cm <- sccore:::mergeCountMatrices(cms, transposed = FALSE) %>% Matrix::t()
 #'
@@ -483,24 +484,24 @@ embeddingPlot <- function(embedding, groups=NULL, colors=NULL, subgroups=NULL, p
 #' ## cm <- conos.obj$getJointCountMatrix(raw = FALSE) # Either normalized or raw values can be used
 #'
 #' ## Here, we create a random sparse matrix
-#' cm <- Matrix::rsparsematrix(30,3,0.5) %>% abs(.) %>% 
+#' cm <- Matrix::rsparsematrix(30,3,0.5) %>% abs(.) %>%
 #'             `dimnames<-`(list(1:30,c("gene1","gene2","gene3")))
 #'
 #' ## Create marker vector
 #' markers <- c("gene1","gene2","gene3")
 #'
-#' ## Additionally, color vectors can be included. 
-#' ## These should have the same length as the input (markers, cell groups) 
+#' ## Additionally, color vectors can be included.
+#' ## These should have the same length as the input (markers, cell groups)
 #' ## Otherwise, they are recycled
 #' col.markers <- c("black","black","red") # or c(1,1,2)
 #' col.clusters <- c("black","red","black") # or c(1,2,1)
 #'
 #' ## Create annotation vector
-#' annotation <- c(rep("cluster1",10),rep("cluster2",10),rep("cluster3",10)) %>% 
+#' annotation <- c(rep("cluster1",10),rep("cluster2",10),rep("cluster3",10)) %>%
 #'     factor() %>% setNames(1:30)
 #'
 #' ## Plot. Here, the expression colours range from gray (low expression) to purple (high expression)
-#' sccore:::dotPlot(markers = markers, count.matrix = cm, cell.groups = annotation, 
+#' sccore:::dotPlot(markers = markers, count.matrix = cm, cell.groups = annotation,
 #'     marker.colour = col.markers, cluster.colour = col.clusters, cols=c("gray","purple"))
 #'
 #' @export
@@ -522,7 +523,7 @@ dotPlot <- function (markers,
                      scale.by = "radius",
                      scale.min = NA,
                      scale.max = NA,
-                     verbose=TRUE,
+                     verbose=FALSE,
                      ...) {
 
   scale.func <- switch(scale.by, 'size' = scale_size, 'radius' = scale_radius, stop("'scale.by' must be either 'size' or 'radius'"))
@@ -549,61 +550,76 @@ dotPlot <- function (markers,
       if(verbose){
         message("Treating 'cell.groups' as a factor.")
       }
-      cell.groups %<>% as.factor()
+      cell.groups %<>%
+        as.factor()
     }, error=function(e) stop("Could not convert 'cell.groups' to a factor\n", e))
   }
   # From CellAnnotatoR:::plotExpressionViolinMap, should be exchanged with generic function
-  p.df <- plapply(markers, function(g) data.frame(Expr = count.matrix[names(cell.groups), g], Type = cell.groups, Gene = g), n.cores=n.cores, progress=verbose, ...) %>% Reduce(rbind, .)
+  p.df <- plapply(markers, function(g) data.frame(Expr = count.matrix[names(cell.groups), g], Type = cell.groups, Gene = g), n.cores=n.cores, progress=verbose, ...) %>%
+    bind_rows()
   if (is.logical(gene.order) && gene.order) {
     gene.order <- unique(markers)
-  } else {
-    gene.order <- NULL
   }
 
   if (!is.null(gene.order)) {
-    p.df %<>% dplyr::mutate(Gene = factor(as.character(.data$Gene), levels = gene.order))
+    p.df %<>%
+      mutate(Gene = factor(as.character(.data$Gene), levels = gene.order))
   }
 
   # Adapted from Seurat:::DotPlot
   if (verbose) {
     message("Calculating expression distributions... ")
   }
-  data.plot <- levels(cell.groups) %>% plapply(function(t) {
-    markers %>% lapply(function(g) {
-      df <- p.df %>% dplyr::filter(.data$Type==t, .data$Gene==g)
-      pct.exp <- sum(df$Expr>0)/dim(df)[1]*100
-      avg.exp <- mean(df$Expr[df$Expr>0])
-      res <- data.frame(gene=g,
-                        pct.exp=pct.exp,
-                        avg.exp=avg.exp)
-      return(res)
-    }) %>% Reduce(rbind, .)
+
+  data.plot <- levels(cell.groups) %>%
+    plapply(function(t) {
+      markers %>%
+        lapply(function(g) {
+          df <- p.df %>%
+            filter(Type==t, Gene==g)
+          pct.exp <- sum(df$Expr>0)/nrow(df)*100
+          avg.exp <- mean(df$Expr[df$Expr>0])
+          res <- data.frame(gene=g,
+                            pct.exp=pct.exp,
+                            avg.exp=avg.exp)
+          return(res)
+        }) %>%
+        bind_rows()
   }, n.cores=n.cores, progress=verbose, ...) %>%
-    stats::setNames(levels(cell.groups)) %>%
-    dplyr::bind_rows(., .id="cluster")
+    setNames(levels(cell.groups)) %>%
+    bind_rows(., .id="cluster")
 
-  data.plot$cluster %<>% factor(., levels=rev(unique(.)))
+  data.plot$cluster %<>%
+    factor(., levels=rev(unique(.)))
 
-  data.plot %<>% dplyr::arrange(.data$gene)
+  data.plot %<>%
+    arrange(gene)
 
-  data.plot$avg.exp.scaled <- data.plot$gene %>% unique %>% sapply(function(g) {
-    data.plot %>% .[.$gene == g, 'avg.exp'] %>%
-      scale %>%
-      setMinMax(min = col.min, max = col.max)
-  }) %>% unlist %>% as.numeric
+  data.plot$avg.exp.scaled <- data.plot$gene %>%
+    unique() %>%
+    sapply(function(g) {
+      data.plot %>%
+        filter(gene == g) %>%
+        select("avg.exp") %>%
+        scale() %>%
+        setMinMax(min = col.min, max = col.max)
+    }) %>%
+    unlist() %>%
+    as.numeric()
 
   data.plot$pct.exp[data.plot$pct.exp < dot.min] <- NA
 
-  cluster.colour %<>% rev
+  cluster.colour %<>%
+    rev()
 
-  plot <- ggplot(data.plot, aes_string("gene", "cluster")) +
+  if (!is.null(gene.order)) data.plot %<>% mutate(gene = gene %>% factor(levels = gene.order))
+
+  plot <- ggplot(data.plot, aes(gene, cluster)) +
     geom_point(aes_string(size = "pct.exp", color = "avg.exp.scaled")) +
     scale.func(range = c(0, dot.scale), limits = c(scale.min, scale.max)) +
+    theme_classic() +
     theme(axis.text.x = element_text(angle=text.angle, hjust = 1, colour=marker.colour),
-          axis.text.y = element_text(colour=cluster.colour),
-          panel.background = element_rect(fill = "white", colour = "black", size = 1, linetype = "solid"),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank()) +
+          axis.text.y = element_text(colour=cluster.colour)) +
     guides(size = guide_legend(title = 'Percent expressed'), color = guide_colorbar(title = 'Average expression')) +
     labs(x = xlab, y = ylab) +
     scale_color_gradient(low = cols[1], high = cols[2])
