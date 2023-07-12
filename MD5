@@ -1,4 +1,4 @@
-519c9b1f51df010443c473f9e8f2b692 *DESCRIPTION
+d919a9d00eef3ceacfe5f721796d6e31 *DESCRIPTION
 5e542d83b26a542c9317743bdf5d3023 *NAMESPACE
 c7c18ac1897f2facdb4dd6b97d6ab1ff *R/RcppExports.R
 9d9373e857c8baeff216719163f4759d *R/data.R
@@ -6,9 +6,9 @@ ae1184c1cd475577833bf6ad39a3a81f *R/diff_expression.R
 6f74d08d45d5a3af1bf00f9b272f046c *R/graph_embedding.R
 81ad174626bf9648096d98586dfe40c0 *R/graphs.R
 c67228fa93c1bae1ba7c0664ce1623c9 *R/helpers.R
-d35ff2823900f639465824adb4854d13 *R/plots.R
+651fb1f8cab2c200759994d176f7c2d4 *R/plots.R
 2ddedbcb13ee8bf9817e4a6d0d0cf587 *R/saveDeAsJson.R
-8426b564e3d7a401bb1af5eff14eb054 *README.md
+5b09d836cc9c972c5c9d99962294ede6 *README.md
 f6aa978ef4dec5790522e8f0e392a6d8 *data/cellAnnotations.rda
 f918f04988c206b7d9dd45f169c8f4d0 *data/conosClusterList.rda
 6c4eab57f1f85c926ded7877edeedb84 *data/conosGraph.rda
@@ -29,7 +29,7 @@ d08081f075f4663975b4f6da422274f3 *man/collapseGraphSum.Rd
 71b278e006c6bbe8ecd57570c7e6e87c *man/computeChebyshevCoeffs.Rd
 e145aff9cddd7e36fadac8d57590ed45 *man/conosClusterList.Rd
 756afd060f5bc1463f0239f7298b1da5 *man/conosGraph.Rd
-38c9841e1e444c706560f845ba1626b3 *man/dotPlot.Rd
+bd05c98218da6e6a7f4176c99ff6f3ca *man/dotPlot.Rd
 79ebe62386b63bbae1985d0648beeba1 *man/embedGraphUmap.Rd
 0c7526d37f7adb2aff381372c645ff39 *man/embedKnnGraph.Rd
 4b215b4f44556126fd87cfebde3ba9c4 *man/embeddingColorsPlot.Rd
