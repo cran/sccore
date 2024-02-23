@@ -1,4 +1,4 @@
-d919a9d00eef3ceacfe5f721796d6e31 *DESCRIPTION
+22d97397e3d244b343459a6d4dc2ae28 *DESCRIPTION
 5e542d83b26a542c9317743bdf5d3023 *NAMESPACE
 c7c18ac1897f2facdb4dd6b97d6ab1ff *R/RcppExports.R
 9d9373e857c8baeff216719163f4759d *R/data.R
@@ -8,7 +8,7 @@ ae1184c1cd475577833bf6ad39a3a81f *R/diff_expression.R
 c67228fa93c1bae1ba7c0664ce1623c9 *R/helpers.R
 651fb1f8cab2c200759994d176f7c2d4 *R/plots.R
 2ddedbcb13ee8bf9817e4a6d0d0cf587 *R/saveDeAsJson.R
-5b09d836cc9c972c5c9d99962294ede6 *README.md
+22f10e82af2d86f059008555523b2be5 *README.md
 f6aa978ef4dec5790522e8f0e392a6d8 *data/cellAnnotations.rda
 f918f04988c206b7d9dd45f169c8f4d0 *data/conosClusterList.rda
 6c4eab57f1f85c926ded7877edeedb84 *data/conosGraph.rda
@@ -61,8 +61,8 @@ b84c227588af7282a2099935fd524a82 *man/sn.Rd
 c78f4edb190fb2504d46330f1130c68e *man/umapEmbedding.Rd
 53219e051f452e49a9d23013c716da92 *man/val2col.Rd
 9e64bdf7536b993f83dcd0d1c5e1d8c7 *man/val2ggcol.Rd
-a97fe518b961b91710719d8d85dd2c66 *src/Makevars
-5f6ed9df175e72df66274afd3c8b34b6 *src/Makevars.win
+019f6c90a9c24178f9ebeaa3b94809f6 *src/Makevars
+3241f7543f2203fa0b7ffa4fb5b1b847 *src/Makevars.win
 1563bcd278e155f051698e5434c91c01 *src/RcppExports.cpp
 adac633b9e8329907103dfb6506a2054 *src/graph_embedding.cpp
 2fec0e79823f3268f8adc4b0268bd2c3 *src/matrix_utils.cpp
