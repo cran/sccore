@@ -1,14 +1,14 @@
-22d97397e3d244b343459a6d4dc2ae28 *DESCRIPTION
-5e542d83b26a542c9317743bdf5d3023 *NAMESPACE
+f29b2a530e87138a2e3864b847a9d4f3 *DESCRIPTION
+d7f23c8d18327ecead3c0824337d9392 *NAMESPACE
 c7c18ac1897f2facdb4dd6b97d6ab1ff *R/RcppExports.R
 9d9373e857c8baeff216719163f4759d *R/data.R
 ae1184c1cd475577833bf6ad39a3a81f *R/diff_expression.R
 6f74d08d45d5a3af1bf00f9b272f046c *R/graph_embedding.R
 81ad174626bf9648096d98586dfe40c0 *R/graphs.R
 c67228fa93c1bae1ba7c0664ce1623c9 *R/helpers.R
-651fb1f8cab2c200759994d176f7c2d4 *R/plots.R
+958067d059a73bb5802445784103ba1d *R/plots.R
 2ddedbcb13ee8bf9817e4a6d0d0cf587 *R/saveDeAsJson.R
-22f10e82af2d86f059008555523b2be5 *README.md
+10a6aa95b6f9a6815d0cacec16ed0b6e *README.md
 f6aa978ef4dec5790522e8f0e392a6d8 *data/cellAnnotations.rda
 f918f04988c206b7d9dd45f169c8f4d0 *data/conosClusterList.rda
 6c4eab57f1f85c926ded7877edeedb84 *data/conosGraph.rda
@@ -34,7 +34,7 @@ bd05c98218da6e6a7f4176c99ff6f3ca *man/dotPlot.Rd
 0c7526d37f7adb2aff381372c645ff39 *man/embedKnnGraph.Rd
 4b215b4f44556126fd87cfebde3ba9c4 *man/embeddingColorsPlot.Rd
 a23929ec8e371ce8c8832fee85a936a7 *man/embeddingGroupPlot.Rd
-cf318816613082943f09ed7ccd6f6bc3 *man/embeddingPlot.Rd
+1a703bb0161aa800b0cff018e46576b2 *man/embeddingPlot-methods.Rd
 9bc575962f244c43d267cc633bcd7e54 *man/extendMatrix.Rd
 2a91b56ddf22face306acc4efdf14ea0 *man/fac2col.Rd
 ec68c21a3668a19329ecf0445ed76336 *man/fac2palette.Rd
@@ -63,7 +63,7 @@ c78f4edb190fb2504d46330f1130c68e *man/umapEmbedding.Rd
 9e64bdf7536b993f83dcd0d1c5e1d8c7 *man/val2ggcol.Rd
 019f6c90a9c24178f9ebeaa3b94809f6 *src/Makevars
 3241f7543f2203fa0b7ffa4fb5b1b847 *src/Makevars.win
-1563bcd278e155f051698e5434c91c01 *src/RcppExports.cpp
+7f0081d29cdf076054609595e1e1a3dc *src/RcppExports.cpp
 adac633b9e8329907103dfb6506a2054 *src/graph_embedding.cpp
 2fec0e79823f3268f8adc4b0268bd2c3 *src/matrix_utils.cpp
 0a3cf31d40976d14f9872218166e178f *src/propagate_labels.cpp
